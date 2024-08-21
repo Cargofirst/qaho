@@ -10,21 +10,9 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         leadingWidth: 60,
         toolbarHeight: 60,
-        leading: Align(
+        leading: const Align(
           alignment: Alignment.centerRight,
-          child: Container(
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-                // borderRadius: BorderRadius.circular(50),
-                color: Colors.grey.shade300,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.grey.shade800, width: 3)),
-            child: Image.asset(
-              'assets/image/qaho.png',
-              color: Colors.black,
-            ),
-          ),
+          child: QahoIcon(),
         ),
         actions: [
           const CircleAvatar(
@@ -59,17 +47,19 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
-              height: 25,
+              height: 50,
               width: double.maxFinite,
             ),
             Text(
               'Commodity Trade Made Clear',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontFamily: 'Poppins-Light', fontWeight: FontWeight.bold),
+                  fontFamily: 'Poppins-SemiBold',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green[900]),
               textAlign: TextAlign.center,
             ),
             const SizedBox(
-              height: 25,
+              height: 50,
             ),
             const SearchBar(
               hintText: 'Search here',
@@ -84,7 +74,7 @@ class HomePage extends StatelessWidget {
               ],
             ),
             const SizedBox(
-              height: 24,
+              height: 50,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,7 +108,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 25,
+              height: 50,
             ),
             const SubTitle(
               text: 'Recently chat',
@@ -139,6 +129,33 @@ class HomePage extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class QahoIcon extends StatelessWidget {
+  const QahoIcon({
+    super.key,
+    this.size = 32,
+    this.borderWidth = 2,
+  });
+  final double size;
+  final double borderWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: size,
+      width: size,
+      decoration: BoxDecoration(
+          // borderRadius: BorderRadius.circular(50),
+          color: Colors.grey.shade300,
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.grey.shade800, width: borderWidth)),
+      child: Image.asset(
+        'assets/image/qaho.png',
+        color: Colors.black,
       ),
     );
   }
@@ -167,40 +184,53 @@ class _NavBarState extends State<NavBar> {
       child: NavigationBar(
         indicatorColor: Colors.black,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-        indicatorShape: const CircleBorder(),
+        indicatorShape: const CircleBorder(
+          side: BorderSide(
+              color: Colors.black,
+              width: 16.0,
+              strokeAlign: BorderSide.strokeAlignCenter),
+        ),
         onDestinationSelected: (value) {
           setState(() {
             selectedIndex = value;
           });
         },
         selectedIndex: selectedIndex,
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(
+            icon: const Icon(
               Bootstrap.house_door_fill,
-              size: 30,
+              size: 32,
             ),
             label: '',
-            selectedIcon: NavSelectedIcon(icon: Bootstrap.house_door_fill),
+            selectedIcon: Icon(
+              Bootstrap.house_door_fill,
+              size: 32,
+              color: Colors.grey[200],
+            ),
           ),
           NavigationDestination(
-            icon: Icon(
+            icon: const Icon(
               Bootstrap.chat_dots_fill,
-              size: 30,
+              size: 32,
             ),
             label: '',
-            selectedIcon: NavSelectedIcon(
-              icon: Bootstrap.chat_dots_fill,
+            selectedIcon: Icon(
+              Bootstrap.chat_dots_fill,
+              size: 32,
+              color: Colors.grey[200],
             ),
           ),
           NavigationDestination(
-              icon: Icon(
+              icon: const Icon(
                 Bootstrap.soundwave,
-                size: 30,
+                size: 32,
               ),
               label: 'Home',
-              selectedIcon: NavSelectedIcon(
-                icon: Bootstrap.soundwave,
+              selectedIcon: Icon(
+                Bootstrap.soundwave,
+                size: 32,
+                color: Colors.grey[200],
               )),
         ],
       ),
@@ -222,12 +252,11 @@ class NavSelectedIcon extends StatelessWidget {
       height: 45,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Colors.black,
+        // color: Colors.black,
         borderRadius: BorderRadius.circular(50),
       ),
       child: Icon(
         icon,
-        color: Colors.grey[200],
         size: 32,
       ),
     );

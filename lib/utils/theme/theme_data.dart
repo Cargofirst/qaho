@@ -6,5 +6,6 @@ class AppThemeData {
       scaffoldBackgroundColor: Colors.grey.shade50,
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
       fontFamily: 'Poppins',
-      appBarTheme: AppBarTheme(backgroundColor: Colors.grey[200]));
+    
+      appBarTheme: AppBarTheme(backgroundColor: Colors.grey[50]));
 }

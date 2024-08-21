@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qaho/page/home.dart';
+import 'package:qaho/page/chat.dart';
+import 'package:qaho/page/history.dart';
 import 'package:qaho/utils/theme/theme_data.dart';
 
 void main() {
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: AppThemeData.themeData,
-      home: const HomePage(),
+      home: const HistortyPage(),
+      
     );
   }
 }
