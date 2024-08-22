@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:icons_plus/icons_plus.dart';
+import 'package:qaho/page/chat.dart';
 import 'package:qaho/page/home.dart';
 
-class HistortyPage extends StatelessWidget {
+class HistortyPage extends StatefulWidget {
   const HistortyPage({super.key});
 
+  @override
+  State<HistortyPage> createState() => _HistortyPageState();
+}
+
+class _HistortyPageState extends State<HistortyPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,15 +19,7 @@ class HistortyPage extends StatelessWidget {
         leadingWidth: 60,
         toolbarHeight: 60,
         actions: [
-          const CircleAvatar(
-            backgroundColor: Colors.grey,
-            radius: 25,
-            child: Icon(
-              Icons.person,
-              size: 34,
-              color: Colors.white,
-            ),
-          ),
+          const ProfileIcon(),
           const SizedBox(
             width: 16,
           ),
@@ -35,6 +35,20 @@ class HistortyPage extends StatelessWidget {
             width: 25,
           ),
         ],
+        leading: Builder(builder: (context) {
+          return IconButton(
+            onPressed: () {
+              _scaffoldKey.currentState?.openDrawer();
+            },
+            icon: const RotatedBox(
+              quarterTurns: 1,
+              child: Icon(
+                FontAwesome.chart_simple_solid,
+                size: 30,
+              ),
+            ),
+          );
+        }),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
@@ -62,7 +76,7 @@ class HistortyPage extends StatelessWidget {
           children: [
             Text(
               'Today',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             ListView.builder(
               shrinkWrap: true,
@@ -74,7 +88,7 @@ class HistortyPage extends StatelessWidget {
             ),
             Text(
               'Previous 30 day',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             ListView.builder(
               shrinkWrap: true,
@@ -86,7 +100,7 @@ class HistortyPage extends StatelessWidget {
             ),
             Text(
               'jun',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             ListView.builder(
               shrinkWrap: true,
@@ -98,7 +112,7 @@ class HistortyPage extends StatelessWidget {
             ),
             Text(
               'jully',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             ListView.builder(
               shrinkWrap: true,

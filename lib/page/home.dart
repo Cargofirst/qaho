@@ -1,69 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:qaho/page/chat.dart';
+import 'package:qaho/routes/app_routes.dart';
+import 'package:qaho/utils/widgets/drawer.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 60,
-        toolbarHeight: 60,
-        leading: const Align(
-          alignment: Alignment.centerRight,
-          child: QahoIcon(),
-        ),
-        actions: [
-          const CircleAvatar(
-            backgroundColor: Colors.grey,
-            radius: 25,
-            child: Icon(
-              Icons.person,
-              size: 34,
-              color: Colors.white,
-            ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 50,
+            width: double.maxFinite,
+          ),
+          Text(
+            'Commodity Trade Made Clear',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontFamily: 'Poppins-SemiBold',
+                fontWeight: FontWeight.bold,
+                color: Colors.green[900]),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(
-            width: 16,
+            height: 50,
           ),
-          CircleAvatar(
-            backgroundColor: Colors.grey[300],
-            radius: 25,
-            child: const Badge(
-              backgroundColor: Colors.green,
-              child: Icon(Icons.notifications),
-            ),
-          ),
-          const SizedBox(
-            width: 25,
-          ),
-        ],
-      ),
-      bottomNavigationBar: const NavBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 50,
-              width: double.maxFinite,
-            ),
-            Text(
-              'Commodity Trade Made Clear',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontFamily: 'Poppins-SemiBold',
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green[900]),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            const SearchBar(
+          Hero(
+            tag: 'search',
+            child: SearchBar(
               hintText: 'Search here',
-              trailing: [
+              keyboardType: TextInputType.none,
+              onTap: () {
+                context.push(AppRoutes.chat);
+              },
+              trailing: const [
                 Icon(
                   Icons.search,
                   size: 30,
@@ -73,62 +53,85 @@ class HomePage extends StatelessWidget {
                 )
               ],
             ),
-            const SizedBox(
-              height: 50,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Trending Prompt',
-                  style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(
+            height: 50,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Trending Prompt',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const Icon(Icons.arrow_forward)
+            ],
+          ),
+          SizedBox(
+            height: 50,
+            child: ListView(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              children: const [
+                TrendingCard(
+                  number: 1,
+                  title: 'Export',
                 ),
-                const Icon(Icons.arrow_forward)
+                TrendingCard(
+                  number: 2,
+                  title: 'Import',
+                ),
+                TrendingCard(
+                  number: 2,
+                  title: 'Domestic Trade',
+                ),
               ],
             ),
-            SizedBox(
-              height: 50,
+          ),
+          const SizedBox(
+            height: 50,
+          ),
+          const SubTitle(
+            text: 'Recently chat',
+          ),
+          Expanded(
+            child: Card(
+              color: Colors.grey.shade100,
               child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
                 children: const [
-                  TrendingCard(
-                    number: 1,
-                    title: 'Export',
-                  ),
-                  TrendingCard(
-                    number: 2,
-                    title: 'Import',
-                  ),
-                  TrendingCard(
-                    number: 2,
-                    title: 'Domestic Trade',
-                  ),
+                  RecentChatBox(),
+                  RecentChatBox(),
+                  RecentChatBox(),
+                  RecentChatBox(),
+                  RecentChatBox(),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 50,
-            ),
-            const SubTitle(
-              text: 'Recently chat',
-            ),
-            Expanded(
-              child: Card(
-                color: Colors.grey.shade100,
-                child: ListView(
-                  children: const [
-                    RecentChatBox(),
-                    RecentChatBox(),
-                    RecentChatBox(),
-                    RecentChatBox(),
-                    RecentChatBox(),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class ProfileImage extends StatelessWidget {
+  const ProfileImage({
+    super.key,
+    this.radius = 25,
+    this.size = 36,
+  });
+  final double radius;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      backgroundColor: Colors.grey,
+      radius: radius,
+      child: Icon(
+        Icons.person,
+        size: size,
+        color: Colors.white,
       ),
     );
   }
@@ -161,17 +164,13 @@ class QahoIcon extends StatelessWidget {
   }
 }
 
-class NavBar extends StatefulWidget {
+class NavBar extends StatelessWidget {
   const NavBar({
     super.key,
+    required this.child,
   });
+  final StatefulNavigationShell child;
 
-  @override
-  State<NavBar> createState() => _NavBarState();
-}
-
-class _NavBarState extends State<NavBar> {
-  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -191,11 +190,24 @@ class _NavBarState extends State<NavBar> {
               strokeAlign: BorderSide.strokeAlignCenter),
         ),
         onDestinationSelected: (value) {
-          setState(() {
-            selectedIndex = value;
-          });
+          switch (value) {
+            case 0:
+              child.goBranch(value);
+
+              break;
+            case 1:
+              context.push(AppRoutes.chat);
+
+              break;
+            case 2:
+              child.goBranch(value);
+
+              break;
+            default:
+              context.push(AppRoutes.home);
+          }
         },
-        selectedIndex: selectedIndex,
+        selectedIndex: child.currentIndex,
         destinations: [
           NavigationDestination(
             icon: const Icon(
@@ -293,7 +305,7 @@ class RecentChatBox extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                ' What are the problems faced by Exporters in India',
+                'What are the problems faced by Exporters in India',
               ),
             )
           ],
@@ -350,6 +362,62 @@ class TrendingCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ScafoldWithNav extends StatefulWidget {
+  const ScafoldWithNav({super.key, required this.body});
+  final StatefulNavigationShell body;
+
+  @override
+  State<ScafoldWithNav> createState() => _ScafoldWithNavState();
+}
+
+class _ScafoldWithNavState extends State<ScafoldWithNav> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      bottomNavigationBar: NavBar(
+        child: widget.body,
+      ),
+      drawer: const CustomDrawer(),
+      appBar: AppBar(
+        leadingWidth: 60,
+        toolbarHeight: 60,
+        actions: [
+          const ProfileIcon(),
+          const SizedBox(
+            width: 16,
+          ),
+          CircleAvatar(
+            backgroundColor: Colors.grey[300],
+            radius: 25,
+            child: const Badge(
+              backgroundColor: Colors.green,
+              child: Icon(Icons.notifications),
+            ),
+          ),
+          const SizedBox(
+            width: 25,
+          ),
+        ],
+        leading: IconButton(
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+          icon: const RotatedBox(
+            quarterTurns: 1,
+            child: Icon(
+              FontAwesome.chart_simple_solid,
+              size: 30,
+            ),
+          ),
+        ),
+      ),
+      body: widget.body,
     );
   }
 }

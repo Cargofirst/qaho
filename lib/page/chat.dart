@@ -1,12 +1,12 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:qaho/page/home.dart';
+import 'package:qaho/routes/app_routes.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
-
+  const ChatPage({super.key, this.prompt});
+  final String? prompt;
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
@@ -21,21 +21,8 @@ class _ChatPageState extends State<ChatPage> {
       appBar: AppBar(
         leadingWidth: 60,
         toolbarHeight: 60,
-
-        // leading: const Align(
-        //   alignment: Alignment.centerRight,
-        //   child: QahoIcon(),
-        // ),
         actions: [
-          const CircleAvatar(
-            backgroundColor: Colors.grey,
-            radius: 25,
-            child: Icon(
-              Icons.person,
-              size: 34,
-              color: Colors.white,
-            ),
-          ),
+          const ProfileIcon(),
           const SizedBox(
             width: 16,
           ),
@@ -51,7 +38,6 @@ class _ChatPageState extends State<ChatPage> {
             width: 25,
           ),
         ],
-
         leading: Builder(builder: (context) {
           return IconButton(
             onPressed: () {
@@ -72,22 +58,26 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SearchBar(
-              hintText: 'Ask Question',
-              leading: const Icon(Bootstrap.soundwave),
-              trailing: [
-                Card(
-                  color: Colors.black87,
-                  shape: const CircleBorder(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.send,
-                      color: Colors.grey[200],
+            Hero(
+              tag: 'search',
+              child: SearchBar(
+                hintText: 'Ask Question',
+              
+                leading: const Icon(Bootstrap.soundwave),
+                trailing: [
+                  Card(
+                    color: Colors.black87,
+                    shape: const CircleBorder(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.send,
+                        color: Colors.grey[200],
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
@@ -121,6 +111,32 @@ class _ChatPageState extends State<ChatPage> {
               text: 'What are the problems faced by ',
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProfileIcon extends StatelessWidget {
+  const ProfileIcon({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        context.push(AppRoutes.setting);
+      },
+      child: Ink(
+        child: const CircleAvatar(
+          backgroundColor: Colors.grey,
+          radius: 25,
+          child: Icon(
+            Icons.person,
+            size: 34,
+            color: Colors.white,
+          ),
         ),
       ),
     );
