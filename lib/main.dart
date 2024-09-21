@@ -3,7 +3,6 @@ import 'package:qaho/routes/app_page.dart';
 import 'package:qaho/utils/theme/theme_data.dart';
 
 
-import 'page/subscription.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: 'Qaho',
       debugShowCheckedModeBanner: false,
       theme: AppThemeData.themeData,
       routerConfig: AppPage().goRouter,

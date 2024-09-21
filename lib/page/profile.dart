@@ -30,12 +30,8 @@ class _SettingPageState extends State<SettingPage> {
               leading: const Card(
                 color: Colors.black12,
                 shape: CircleBorder(),
-                child: Padding(
-                  padding: EdgeInsets.all(3.0),
-                  child: ProfileImage(
-                    radius: 20,
-                    size: 26,
-                  ),
+                child: ProfileImage(
+                 
                 ),
               ),
               title: Text(
@@ -53,27 +49,29 @@ class _SettingPageState extends State<SettingPage> {
             const ListTile(
               leading: Icon(
                 Icons.email,
-                size: 36,
+             
               ),
               title: Text('Email'),
               subtitle: Text('tech@cargofirst.net'),
             ),
             ListTile(
-              leading: Icon(
+             
+              leading: const Icon(
                 Icons.safety_check,
-                size: 36,
+
+           
               ),
               onTap: () {
                 context.push(AppRoutes.subscription);
               },
-              title: Text('Subscription'),
-              subtitle: Text('Free plan'),
+              title: const Text('Subscription'),
+              subtitle: const Text('Free plan'),
             ),
             const Text('App'),
             const ListTile(
               leading: Icon(
                 Icons.wb_sunny_outlined,
-                size: 36,
+               
               ),
               title: Text('Theme'),
               subtitle: Text('Light'),
@@ -81,7 +79,7 @@ class _SettingPageState extends State<SettingPage> {
             const ListTile(
               leading: Icon(
                 Icons.language,
-                size: 36,
+               
               ),
               title: Text('Language'),
               subtitle: Text('English'),

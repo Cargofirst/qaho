@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:icons_plus/icons_plus.dart';
+import 'package:qaho/api/google_sigin_api.dart';
 import 'package:qaho/page/home.dart';
-import 'package:qaho/routes/app_routes.dart';
+
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key, this.prompt});
@@ -16,6 +18,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -62,7 +65,6 @@ class _ChatPageState extends State<ChatPage> {
               tag: 'search',
               child: SearchBar(
                 hintText: 'Ask Question',
-              
                 leading: const Icon(Bootstrap.soundwave),
                 trailing: [
                   Card(
@@ -125,16 +127,14 @@ class ProfileIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        context.push(AppRoutes.setting);
+      onTap: () async {
+        await GoogleSiginApi.signIn();
       },
       child: Ink(
         child: const CircleAvatar(
           backgroundColor: Colors.grey,
-          radius: 25,
           child: Icon(
             Icons.person,
-            size: 34,
             color: Colors.white,
           ),
         ),

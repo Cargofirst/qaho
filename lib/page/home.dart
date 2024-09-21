@@ -15,25 +15,25 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
-            height: 50,
+            height: 24,
             width: double.maxFinite,
           ),
           Text(
             'Commodity Trade Made Clear',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontFamily: 'Poppins-SemiBold',
                 fontWeight: FontWeight.bold,
                 color: Colors.green[900]),
             textAlign: TextAlign.center,
           ),
           const SizedBox(
-            height: 50,
+            height: 24,
           ),
           Hero(
             tag: 'search',
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
               trailing: const [
                 Icon(
                   Icons.search,
-                  size: 30,
+                  
                 ),
                 SizedBox(
                   width: 16,
@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                   title: 'Import',
                 ),
                 TrendingCard(
-                  number: 2,
+                  number: 3,
                   title: 'Domestic Trade',
                 ),
               ],
@@ -94,20 +94,23 @@ class _HomePageState extends State<HomePage> {
           const SubTitle(
             text: 'Recently chat',
           ),
-          Expanded(
-            child: Card(
-              color: Colors.grey.shade100,
-              child: ListView(
-                children: const [
-                  RecentChatBox(),
-                  RecentChatBox(),
-                  RecentChatBox(),
-                  RecentChatBox(),
-                  RecentChatBox(),
-                ],
-              ),
+          Card(
+            color: Colors.grey.shade100,
+            child: ListView(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              children: const [
+                RecentChatBox(),
+                RecentChatBox(),
+                RecentChatBox(),
+              
+               
+              ],
             ),
-          )
+          ),
+          const SizedBox(
+            height: 24,
+          ),
         ],
       ),
     );
@@ -117,11 +120,11 @@ class _HomePageState extends State<HomePage> {
 class ProfileImage extends StatelessWidget {
   const ProfileImage({
     super.key,
-    this.radius = 25,
-    this.size = 36,
+    this.radius,
+    this.size,
   });
-  final double radius;
-  final double size;
+  final double? radius;
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +143,7 @@ class ProfileImage extends StatelessWidget {
 class QahoIcon extends StatelessWidget {
   const QahoIcon({
     super.key,
-    this.size = 32,
+    this.size = 26,
     this.borderWidth = 2,
   });
   final double size;
@@ -176,17 +179,17 @@ class NavBar extends StatelessWidget {
     return SafeArea(
         child: Container(
       height: 60,
-      margin: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 24),
+      margin: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 20),
       decoration: BoxDecoration(
           color: Colors.grey.shade200, borderRadius: BorderRadius.circular(24)),
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(16),
       child: NavigationBar(
         indicatorColor: Colors.black,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
         indicatorShape: const CircleBorder(
           side: BorderSide(
               color: Colors.black,
-              width: 16.0,
+              width: 14.0,
               strokeAlign: BorderSide.strokeAlignCenter),
         ),
         onDestinationSelected: (value) {
@@ -212,19 +215,19 @@ class NavBar extends StatelessWidget {
           NavigationDestination(
             icon: const Icon(
               Bootstrap.house_door_fill,
-              size: 32,
+          
             ),
             label: '',
             selectedIcon: Icon(
               Bootstrap.house_door_fill,
-              size: 32,
+             
               color: Colors.grey[200],
             ),
           ),
           NavigationDestination(
             icon: const Icon(
               Bootstrap.chat_dots_fill,
-              size: 32,
+             
             ),
             label: '',
             selectedIcon: Icon(
@@ -294,14 +297,14 @@ class RecentChatBox extends StatelessWidget {
             Card(
               shape: CircleBorder(),
               child: Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(8.0),
                 child: Icon(
                   Icons.chat_bubble_outline_outlined,
                 ),
               ),
             ),
             SizedBox(
-              width: 25,
+              width: 16,
             ),
             Expanded(
               child: Text(
@@ -378,6 +381,7 @@ class _ScafoldWithNavState extends State<ScafoldWithNav> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       key: _scaffoldKey,
       bottomNavigationBar: NavBar(
@@ -394,7 +398,7 @@ class _ScafoldWithNavState extends State<ScafoldWithNav> {
           ),
           CircleAvatar(
             backgroundColor: Colors.grey[300],
-            radius: 25,
+            
             child: const Badge(
               backgroundColor: Colors.green,
               child: Icon(Icons.notifications),
@@ -412,7 +416,7 @@ class _ScafoldWithNavState extends State<ScafoldWithNav> {
             quarterTurns: 1,
             child: Icon(
               FontAwesome.chart_simple_solid,
-              size: 30,
+             
             ),
           ),
         ),
