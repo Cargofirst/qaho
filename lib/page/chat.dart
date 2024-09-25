@@ -1,10 +1,14 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:qaho/api/google_sigin_api.dart';
 import 'package:qaho/page/home.dart';
-
+import 'package:qaho/utils/random.dart';
+import '../model/chat.dart';
+import '../bloc/qaho_bloc.dart';
+import '../cubit/chat_cubit.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key, this.prompt});
@@ -15,10 +19,26 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late final TextEditingController? _controller;
+  late final String _sessionId;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+    _sessionId = RandomString.generate();
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    _controller = null;
+    _scaffoldKey.currentState?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -65,16 +85,41 @@ class _ChatPageState extends State<ChatPage> {
               tag: 'search',
               child: SearchBar(
                 hintText: 'Ask Question',
+                controller: _controller,
                 leading: const Icon(Bootstrap.soundwave),
+                onSubmitted: (value) {
+                  context.read<QahoBloc>().add(AskQuestion(
+                          question: Question(
+                        question: value.trim(),
+                        sessionId: _sessionId,
+                        collectionName: 'questions',
+                      )));
+                },
                 trailing: [
                   Card(
                     color: Colors.black87,
                     shape: const CircleBorder(),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.send,
-                        color: Colors.grey[200],
+                      child: BlocConsumer<QahoBloc, QahoState>(
+                        listener: (context, state) {
+                          if (state is QahoSuccess) {
+                            context.read<ChatCubit>().addChat(
+                                type: Type.human,
+                                message: _controller?.text ?? '');
+                            _controller?.clear();
+                          }
+                        },
+                        builder: (context, state) {
+                          if (state is QahoLoading) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          return Icon(
+                            Icons.send,
+                            color: Colors.grey[200],
+                          );
+                        },
                       ),
                     ),
                   )
@@ -96,24 +141,25 @@ class _ChatPageState extends State<ChatPage> {
         ),
       ),
       drawer: const Drawer(),
-      body: const SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 4, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            QuestionCard(answer: 'What are the problems '),
-            AnswerCard(
-              text:
-                  'What are the problems faced by Exporters in India,What are the problems faced by Exporters in IndiaWhat are the problems faced by Exporters in India',
-            ),
-            QuestionCard(
-                answer:
-                    'What are the problems What are the problems faced by Exporters in India,What are the problems faced by Exporters in IndiaWhat are the problems faced by Exporters in India'),
-            AnswerCard(
-              text: 'What are the problems faced by ',
-            ),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+        child: BlocBuilder<ChatCubit, List<Chat>>(
+          builder: (context, state) {
+            return ListView.builder(
+              reverse: true,
+              itemBuilder: (context, index) {
+                final chat = state[index];
+                if (chat.type == Type.human) {
+                  return AnswerCard(text: chat.message);
+                } else {
+                  return QuestionCard(answer: chat.message);
+                }
+              },
+              itemCount: state.length,
+            );
+          },
         ),
+
       ),
     );
   }

@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
               trailing: const [
                 Icon(
                   Icons.search,
-                  
+
                 ),
                 SizedBox(
                   width: 16,
@@ -103,8 +103,8 @@ class _HomePageState extends State<HomePage> {
                 RecentChatBox(),
                 RecentChatBox(),
                 RecentChatBox(),
-              
-               
+
+
               ],
             ),
           ),
@@ -179,7 +179,7 @@ class NavBar extends StatelessWidget {
     return SafeArea(
         child: Container(
       height: 60,
-      margin: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 16),
       decoration: BoxDecoration(
           color: Colors.grey.shade200, borderRadius: BorderRadius.circular(24)),
       padding: const EdgeInsets.all(16),
@@ -215,19 +215,19 @@ class NavBar extends StatelessWidget {
           NavigationDestination(
             icon: const Icon(
               Bootstrap.house_door_fill,
-          
+
             ),
             label: '',
             selectedIcon: Icon(
               Bootstrap.house_door_fill,
-             
+
               color: Colors.grey[200],
             ),
           ),
           NavigationDestination(
             icon: const Icon(
               Bootstrap.chat_dots_fill,
-             
+
             ),
             label: '',
             selectedIcon: Icon(
@@ -381,7 +381,7 @@ class _ScafoldWithNavState extends State<ScafoldWithNav> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-   
+
     return Scaffold(
       key: _scaffoldKey,
       bottomNavigationBar: NavBar(
@@ -398,7 +398,7 @@ class _ScafoldWithNavState extends State<ScafoldWithNav> {
           ),
           CircleAvatar(
             backgroundColor: Colors.grey[300],
-            
+
             child: const Badge(
               backgroundColor: Colors.green,
               child: Icon(Icons.notifications),
@@ -416,7 +416,7 @@ class _ScafoldWithNavState extends State<ScafoldWithNav> {
             quarterTurns: 1,
             child: Icon(
               FontAwesome.chart_simple_solid,
-             
+
             ),
           ),
         ),
