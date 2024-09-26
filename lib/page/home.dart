@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:qaho/page/chat.dart';
 import 'package:qaho/routes/app_routes.dart';
 import 'package:qaho/utils/widgets/drawer.dart';
+
+import '../bloc/connect/connect_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,104 +17,131 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    super.initState();
+    context.read<ConnectBloc>().add(Connect());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 24,
-            width: double.maxFinite,
-          ),
-          Text(
-            'Commodity Trade Made Clear',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontFamily: 'Poppins-SemiBold',
-                fontWeight: FontWeight.bold,
-                color: Colors.green[900]),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          Hero(
-            tag: 'search',
-            child: SearchBar(
-              hintText: 'Search here',
-              keyboardType: TextInputType.none,
-              onTap: () {
-                context.push(AppRoutes.chat);
-              },
-              trailing: const [
-                Icon(
-                  Icons.search,
-
-                ),
-                SizedBox(
-                  width: 16,
-                )
-              ],
+    return BlocListener<ConnectBloc, ConnectState>(
+      listenWhen: (previous, current) {
+        return previous != current;
+      },
+      listener: (context, state) {
+        if (state is ConnectionLoading) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Connecting to server'),
+            duration: Durations.long2,
+          ));
+        } else if (state is ConnectionFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(state.error),
+            backgroundColor: Colors.red,
+          ));
+        } else if (state is ConnectionSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(state.message.message),
+            backgroundColor: Colors.green,
+            duration: Durations.long1,
+          ));
+        }
+      },
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 24,
+              width: double.maxFinite,
             ),
-          ),
-          const SizedBox(
-            height: 50,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Trending Prompt',
-                style: Theme.of(context).textTheme.titleMedium,
+            Text(
+              'Commodity Trade Made Clear',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontFamily: 'Poppins-SemiBold',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green[900]),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            Hero(
+              tag: 'search',
+              child: SearchBar(
+                hintText: 'Search here',
+                keyboardType: TextInputType.none,
+                onTap: () {
+                  context.push(AppRoutes.chat);
+                },
+                trailing: const [
+                  Icon(
+                    Icons.search,
+                  ),
+                  SizedBox(
+                    width: 16,
+                  )
+                ],
               ),
-              const Icon(Icons.arrow_forward)
-            ],
-          ),
-          SizedBox(
-            height: 50,
-            child: ListView(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              children: const [
-                TrendingCard(
-                  number: 1,
-                  title: 'Export',
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Trending Prompt',
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-                TrendingCard(
-                  number: 2,
-                  title: 'Import',
-                ),
-                TrendingCard(
-                  number: 3,
-                  title: 'Domestic Trade',
-                ),
+                const Icon(Icons.arrow_forward)
               ],
             ),
-          ),
-          const SizedBox(
-            height: 50,
-          ),
-          const SubTitle(
-            text: 'Recently chat',
-          ),
-          Card(
-            color: Colors.grey.shade100,
-            child: ListView(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              children: const [
-                RecentChatBox(),
-                RecentChatBox(),
-                RecentChatBox(),
-
-
-              ],
+            SizedBox(
+              height: 50,
+              child: ListView(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                children: const [
+                  TrendingCard(
+                    number: 1,
+                    title: 'Export',
+                  ),
+                  TrendingCard(
+                    number: 2,
+                    title: 'Import',
+                  ),
+                  TrendingCard(
+                    number: 3,
+                    title: 'Domestic Trade',
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-        ],
+            const SizedBox(
+              height: 50,
+            ),
+            const SubTitle(
+              text: 'Recently chat',
+            ),
+            Card(
+              color: Colors.grey.shade100,
+              child: ListView(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                children: const [
+                  RecentChatBox(),
+                  RecentChatBox(),
+                  RecentChatBox(),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -215,19 +245,16 @@ class NavBar extends StatelessWidget {
           NavigationDestination(
             icon: const Icon(
               Bootstrap.house_door_fill,
-
             ),
             label: '',
             selectedIcon: Icon(
               Bootstrap.house_door_fill,
-
               color: Colors.grey[200],
             ),
           ),
           NavigationDestination(
             icon: const Icon(
               Bootstrap.chat_dots_fill,
-
             ),
             label: '',
             selectedIcon: Icon(
@@ -381,7 +408,6 @@ class _ScafoldWithNavState extends State<ScafoldWithNav> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: _scaffoldKey,
       bottomNavigationBar: NavBar(
@@ -398,7 +424,6 @@ class _ScafoldWithNavState extends State<ScafoldWithNav> {
           ),
           CircleAvatar(
             backgroundColor: Colors.grey[300],
-
             child: const Badge(
               backgroundColor: Colors.green,
               child: Icon(Icons.notifications),
@@ -416,7 +441,6 @@ class _ScafoldWithNavState extends State<ScafoldWithNav> {
             quarterTurns: 1,
             child: Icon(
               FontAwesome.chart_simple_solid,
-
             ),
           ),
         ),

@@ -11,13 +11,17 @@ class QahoBloc extends Bloc<QahoEvent, QahoState> {
     on<AskQuestion>((event, emit) async {
       emit(QahoLoading());
       final Question question = event.question;
-
+      if (question.question.isEmpty) {
+        emit(QahoFailure(error: 'Question cannot be empty'));
+        return;
+      }
       try {
         final Response response = await QahoApi().call(question: question);
+        print(response.request);
         if (response.statusCode == 200) {
           emit(QahoSuccess(response: response));
         } else {
-          emit(QahoFailure(error: 'Failed connecting to server'));
+          emit(QahoFailure(error: response.body));
         }
       } catch (e) {
         emit(QahoFailure(error: e.toString()));
@@ -25,19 +29,19 @@ class QahoBloc extends Bloc<QahoEvent, QahoState> {
     });
   }
 
-  @override
-  void onChange(Change<QahoState> change) {
-    if (kDebugMode) {
-      print(change);
-    }
-    super.onChange(change);
-  }
+  // @override
+  // void onChange(Change<QahoState> change) {
+  //   if (kDebugMode) {
+  //     print(change);
+  //   }
+  //   super.onChange(change);
+  // }
 
-  @override
-  void onTransition(Transition<QahoEvent, QahoState> transition) {
-    if (kDebugMode) {
-      print(transition);
-    }
-    super.onTransition(transition);
-  }
+  // @override
+  // void onTransition(Transition<QahoEvent, QahoState> transition) {
+  //   if (kDebugMode) {
+  //     print(transition);
+  //   }
+  //   super.onTransition(transition);
+  // }
 }

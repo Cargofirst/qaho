@@ -9,12 +9,27 @@ class ChatCubit extends Cubit<List<Chat>> {
       required String message,
       String? sessionId,
       String? collectionName}) {
+    if (message.isEmpty && type == Type.human) return;
+    final chat = Chat(
+        type: type,
+        message: message,
+        sessionId: sessionId,
+        collectionName: collectionName);
+    emit([chat, ...state]);
+  }
+
+  void updateChat(
+      {required Type type,
+      required String message,
+      String? sessionId,
+      String? collectionName}) {
     if (message.isEmpty) return;
     final chat = Chat(
         type: type,
         message: message,
         sessionId: sessionId,
         collectionName: collectionName);
-    emit([...state, chat]);
+    state.removeAt(0);
+    emit([chat, ...state]);
   }
 }

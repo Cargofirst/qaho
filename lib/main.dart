@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qaho/bloc/connect/connect_bloc.dart';
 import 'package:qaho/routes/app_page.dart';
 import 'package:qaho/utils/theme/theme_data.dart';
 
-import 'bloc/qaho_bloc.dart';
+import 'bloc/qaho/qaho_bloc.dart';
 import 'cubit/chat_cubit.dart';
 
 void main() {
@@ -18,10 +19,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<ChatCubit>(
-          create: (context) => ChatCubit(),
-        ),
-        BlocProvider(create: (context) => QahoBloc())
+        BlocProvider(create: (context) => ChatCubit()),
+        BlocProvider(create: (context) => QahoBloc()),
+        BlocProvider(create: (context) => ConnectBloc())
       ],
       child: MaterialApp.router(
         title: 'Qaho',

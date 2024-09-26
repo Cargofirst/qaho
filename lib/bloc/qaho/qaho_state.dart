@@ -7,9 +7,8 @@ final class QahoInitial extends QahoState {}
 
 final class QahoLoading extends QahoState {}
 
-class QahoSuccess extends QahoState {
+final class QahoSuccess extends QahoState {
   final Response response;
-
   QahoSuccess({required this.response});
 }
 

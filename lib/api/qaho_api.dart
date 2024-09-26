@@ -1,12 +1,20 @@
+
 import 'package:http/http.dart';
 import 'package:qaho/model/chat.dart';
 
+import '../const/key.dart';
+
 class QahoApi {
-  static const String baseUrl = 'https://api.qaho.io';
+  Future<Response> connect() async {
+    return await get(
+      Uri.parse(Key.qahoUrl),
+    );
+  }
+
   Future<Response> call({required Question question}) async {
     return await post(
-      Uri.parse('$baseUrl/chat'),
-      body: question.toJson(),
+      Uri.parse('${Key.qahoUrl}/qaho'),
+      body: question.toRawJson(),
     );
   }
 }
