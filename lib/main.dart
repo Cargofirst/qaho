@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qaho/bloc/connect/connect_bloc.dart';
 import 'package:qaho/routes/app_page.dart';
+
 import 'package:qaho/utils/theme/theme_data.dart';
 
 import 'bloc/qaho/qaho_bloc.dart';
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => QahoBloc()),
         BlocProvider(create: (context) => ConnectBloc())
       ],
+      // child: MaterialApp(
+      //   home: StreamPage(),
+      // ),
       child: MaterialApp.router(
         title: 'Qaho',
         debugShowCheckedModeBanner: false,

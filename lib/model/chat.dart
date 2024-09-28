@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class Question {
@@ -50,15 +51,29 @@ class Chat {
 
   factory Chat.fromMap(Map<String, dynamic> json) => Chat(
         type: json["type"] == "human" ? Type.human : Type.ai,
-        message: json["question"],
+        message: json["message"],
         sessionId: json["session_id"],
         collectionName: json["collection_name"],
       );
 
   Map<String, dynamic> toMap() => {
         "type": type == Type.human ? "human" : "ai",
-        "question": message,
+        "message": message,
         "session_id": sessionId,
         "collection_name": collectionName,
       };
+
+  Chat copyWith({
+    Type? type,
+    String? message,
+    String? sessionId,
+    String? collectionName,
+  }) {
+    return Chat(
+      type: type ?? this.type,
+      message: message ?? this.message,
+      sessionId: sessionId ?? this.sessionId,
+      collectionName: collectionName ?? this.collectionName,
+    );
+  }
 }

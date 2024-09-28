@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
 
 import '../../api/qaho_api.dart';
 import '../../model/message.dart';
@@ -16,9 +15,10 @@ class ConnectBloc extends Bloc<ConnectEvent, ConnectState> {
       }
       emit(ConnectionLoading());
       try {
-        final Response response = await QahoApi().connect();
+        final response = await QahoApi().connect();
         if (response.statusCode == 200) {
-          emit(ConnectionSuccess(message: Message.fromJson(response.body)));
+
+          emit(ConnectionSuccess(message: Message.fromMap(response.data)));
         } else {
           emit(ConnectionFailure(error: 'Failed connecting to server'));
         }

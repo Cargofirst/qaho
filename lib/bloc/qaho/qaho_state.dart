@@ -1,18 +1,32 @@
 part of 'qaho_bloc.dart';
 
-@immutable
-sealed class QahoState {}
+abstract class QahoState extends Equatable {
+  const QahoState(this.chat);
 
-final class QahoInitial extends QahoState {}
+  final List<Chat> chat;
 
-final class QahoLoading extends QahoState {}
-
-final class QahoSuccess extends QahoState {
-  final Response response;
-  QahoSuccess({required this.response});
+  @override
+  List<Object> get props => [];
 }
 
-final class QahoFailure extends QahoState {
+class QahoInitial extends QahoState {
+  QahoInitial() : super([]);
+}
+
+class QahoLoading extends QahoState {
+  const QahoLoading(super.chat);
+}
+
+class QahoFailure extends QahoState {
   final String error;
-  QahoFailure({required this.error});
+
+  const QahoFailure(super.chat, {required this.error});
+
+  @override
+  List<Object> get props => [error];
+}
+
+class QahoSuccess extends QahoState {
+  @override
+  const QahoSuccess({required List<Chat> chat}) : super(chat);
 }

@@ -1,17 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:qaho/api/google_sigin_api.dart';
-import 'package:qaho/page/home.dart';
-import 'package:qaho/utils/random.dart';
+
+import '../api/google_sigin_api.dart';
 import '../bloc/connect/connect_bloc.dart';
 import '../model/chat.dart';
 import '../bloc/qaho/qaho_bloc.dart';
-import '../cubit/chat_cubit.dart';
+
+import '../utils/random.dart';
 import '../utils/widgets/skelton.dart';
+import 'home.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key, this.prompt});
@@ -91,13 +90,13 @@ class _ChatPageState extends State<ChatPage> {
                 controller: _controller,
                 leading: const Icon(Bootstrap.soundwave),
                 onSubmitted: (value) {
-
                   context.read<QahoBloc>().add(AskQuestion(
                           question: Question(
                         question: value.trim(),
                         sessionId: _sessionId,
                         collectionName: 'questions',
                       )));
+                  _controller.clear();
                 },
                 trailing: [
                   Card(
@@ -107,23 +106,22 @@ class _ChatPageState extends State<ChatPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: BlocConsumer<QahoBloc, QahoState>(
                         listener: (context, state) {
-                            context.read<ChatCubit>().addChat(
-                              type: Type.human, message: _controller.text);
+                          if (state is QahoSuccess) {
+                            // context.read<ChatCubit>().addChat(
+                            //     type: Type.ai, message: state.chat[0].message);
+                          }
+                          // context.read<ChatCubit>().addChat(
+                          //     type: Type.human, message: _controller.text);
                           if (state is QahoLoading) {
-                            context
-                                .read<ChatCubit>()
-                                .addChat(type: Type.ai, message: '');
+                            // context
+                            //     .read<ChatCubit>()
+                            //     .addChat(type: Type.ai, message: '');
 
-                            _controller.clear();
+
                           }
                           if (state is QahoFailure) {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text(state.error)));
-                          } else if (state is QahoSuccess) {
-                            context.read<ChatCubit>().updateChat(
-                                type: Type.ai, message: state.response.body);
-
-
                           }
                         },
                         builder: (context, state) {
@@ -159,21 +157,21 @@ class _ChatPageState extends State<ChatPage> {
       drawer: const Drawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),
-
-        child: BlocBuilder<ChatCubit, List<Chat>>(
+        child: BlocBuilder<QahoBloc, QahoState>(
           builder: (context, state) {
             return ListView.builder(
               shrinkWrap: true,
               reverse: true,
               itemBuilder: (context, index) {
-                final chat = state[index];
+                final chat = state.chat[index];
+
                 if (chat.type == Type.ai) {
                   return AnswerCard(text: chat.message);
                 } else {
                   return QuestionCard(answer: chat.message);
                 }
               },
-              itemCount: state.length,
+              itemCount: state.chat.length,
             );
           },
         ),
@@ -218,7 +216,7 @@ class QuestionCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         child: Text(
           answer,
-          textAlign: TextAlign.end,
+          textAlign: TextAlign.start,
         ),
       ),
     );
@@ -236,8 +234,6 @@ class AnswerCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-
-
         children: [
           const QahoIcon(),
           const SizedBox(
