@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qaho/api/qaho_api.dart';
@@ -61,7 +60,7 @@ class QahoBloc extends Bloc<QahoEvent, QahoState> {
 
             state.chat[0] = aiChat;
 
-            emit(QahoLoading([...state.chat]));
+            emit(QahoSuccess(chat: [...state.chat]));
           });
 
           emit(QahoSuccess(chat: [...state.chat]));

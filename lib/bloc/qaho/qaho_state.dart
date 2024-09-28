@@ -1,12 +1,12 @@
 part of 'qaho_bloc.dart';
 
-abstract class QahoState extends Equatable {
+abstract class QahoState {
   const QahoState(this.chat);
 
   final List<Chat> chat;
 
-  @override
-  List<Object> get props => [];
+  // @override
+  // List<Object> get props => [];
 }
 
 class QahoInitial extends QahoState {
@@ -22,8 +22,8 @@ class QahoFailure extends QahoState {
 
   const QahoFailure(super.chat, {required this.error});
 
-  @override
-  List<Object> get props => [error];
+  // @override
+  // List<Object> get props => [error];
 }
 
 class QahoSuccess extends QahoState {
