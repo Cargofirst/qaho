@@ -28,11 +28,12 @@ class MyApp extends StatelessWidget {
       //   home: StreamPage(),
       // ),
       child: MaterialApp.router(
-        title: 'Qaho',
+        title: 'QahoAI',
         debugShowCheckedModeBanner: false,
         theme: AppThemeData.themeData,
         routerConfig: AppPage().goRouter,
       ),
+
     );
   }
 }

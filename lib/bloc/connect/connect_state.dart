@@ -1,7 +1,10 @@
 part of 'connect_bloc.dart';
 
 @immutable
-sealed class ConnectState {}
+sealed class ConnectState extends Equatable {
+  @override
+  List<Object> get props => [];
+}
 
 final class ConnectInitial extends ConnectState {}
 

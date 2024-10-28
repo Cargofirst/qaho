@@ -5,12 +5,15 @@ import 'package:qaho/api/qaho_api.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 
 import 'package:qaho/model/chat.dart';
+import 'package:qaho/model/history.dart';
 part 'qaho_event.dart';
 part 'qaho_state.dart';
 
 class QahoBloc extends Bloc<QahoEvent, QahoState> {
   QahoBloc() : super(QahoInitial()) {
-    on<AskQuestion>((event, emit) async {
+    on<AskQuestion>(_generateAnswer, transformer: sequential());
+  }
+  _generateAnswer(event, emit) async {
       final Question question = event.question;
 
       // Emit initial human chat message
@@ -71,7 +74,6 @@ class QahoBloc extends Bloc<QahoEvent, QahoState> {
         }
       } catch (e) {
         emit(QahoFailure(state.chat, error: e.toString()));
-      }
-    }, transformer: sequential());
+    }
   }
 }
